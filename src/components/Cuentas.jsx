@@ -28,7 +28,12 @@ const RegistroForm = () => {
     numeroUnidad: "",
     gasolina: "",
     precioGasolina: "",
-    gastos: "",
+    gastos: [
+      { descripcion: "", cantidad: "" },
+      { descripcion: "", cantidad: "" },
+      { descripcion: "", cantidad: "" },
+      { descripcion: "", cantidad: "" },
+    ],
   });
 
   const handleFechaChange = (e) => {
@@ -87,10 +92,23 @@ const RegistroForm = () => {
     }));
   };
 
-  const handleGastosChange = (e) => {
+  const handleDescripcionChange = (index) => (e) => {
+    const { value } = e.target;
     setRegistro((prevState) => ({
       ...prevState,
-      gastos: e.target.value,
+      gastos: prevState.gastos.map((item, i) =>
+        i === index ? { ...item, descripcion: value } : item
+      ),
+    }));
+  };
+
+  const handleCantidadChange = (index) => (e) => {
+    const { value } = e.target;
+    setRegistro((prevState) => ({
+      ...prevState,
+      gastos: prevState.gastos.map((item, i) =>
+        i === index ? { ...item, cantidad: value } : item
+      ),
     }));
   };
 
@@ -185,15 +203,28 @@ const RegistroForm = () => {
           step="0.01"
         />
       </label>
-      <label>
-        <textarea
-          placeholder="Descripción"
-          name="Gastos"
-          value={registro.gastos}
-          onChange={handleGastosChange}
-          rows={4} // Puedes ajustar el número de filas según tus necesidades
-        />
-      </label>
+      <label>Gastos:</label>
+      {registro.gastos.map((gasto, index) => (
+        <div key={index}>
+          <label>
+            <input
+              placeholder={`Descripción ${index + 1}`}
+              type="text"
+              value={gasto.descripcion}
+              onChange={handleDescripcionChange(index)}
+            />
+          </label>
+          <label>
+            <input
+            placeholder={`Cantidad ${index + 1}`}
+              type="number"
+              value={gasto.cantidad}
+              onChange={handleCantidadChange(index)}
+              step="0.01"
+            />
+          </label>
+        </div>
+      ))}
       <button className="boton-guardar" type="submit">
         Agregar Registro
       </button>
@@ -298,6 +329,29 @@ const RegistroTable = () => {
     });
   }
 
+  // Calcula el total de los gastos
+  const calcularTotalGastos = () => {
+    let total = 0;
+    currentRecord.gastos.forEach((gasto) => {
+      if (gasto.cantidad.trim() !== "") {
+        // Verifica que la cantidad no sea una cadena vacía
+        total += parseFloat(gasto.cantidad);
+      }
+    });
+    return total.toFixed(2); // Redondea el total a 2 decimales
+  };
+
+  const calcularCuentaTotal = () => {
+    const cuentaActual = parseFloat(registros[currentRecordIndex].cuenta);
+    const totalGastos = parseFloat(calcularTotalGastos());
+    return (cuentaActual + totalGastos).toFixed(2);
+  };
+
+  // Verifica si hay algún gasto con una cantidad válida
+  const hayGastos =
+    currentRecord &&
+    currentRecord.gastos.some((gasto) => gasto.cantidad.trim() !== "");
+
   return (
     <>
       <table ref={tablaRef}>
@@ -305,7 +359,7 @@ const RegistroTable = () => {
           <tr>
             <th colSpan={2} className="encabezado">
               {currentRecord ? formatDate(currentRecord.fecha) : ""}
-            </th>{" "}
+            </th>
             {/* Verifica si hay un registro antes de acceder a sus propiedades */}
           </tr>
           <tr>
@@ -346,7 +400,7 @@ const RegistroTable = () => {
               <tr>
                 <td className="titulo">Gasolina $</td>
                 <td className="valor">
-                  $ {registros[currentRecordIndex].gasolina}.00
+                  $ {registros[currentRecordIndex].gasolina}
                 </td>
               </tr>
               <tr>
@@ -356,17 +410,65 @@ const RegistroTable = () => {
                 </td>
               </tr>
               <tr>
-                <td className="titulo">Gastos</td>
+                <td className="titulo">gasolina x km.</td>
                 <td className="valor">
-                  {registros[currentRecordIndex].gastos}
+                  ${" "}
+                  {(
+                    registros[currentRecordIndex].gasolina /
+                    registros[currentRecordIndex].kmRecorridos
+                  ).toFixed(2)}
                 </td>
               </tr>
               <tr>
-                <td className="titulo">gasolina x km.</td>
+                <td className="titulo">litros.</td>
                 <td className="valor">
-                  {((registros[currentRecordIndex].gasolina)/(registros[currentRecordIndex].kmRecorridos)).toFixed(2)}
+                  {(
+                    registros[currentRecordIndex].gasolina /
+                    registros[currentRecordIndex].precioGasolina
+                  ).toFixed(2)}
                 </td>
               </tr>
+              {hayGastos && (
+                <tr>
+                  <td className="encabezado" colSpan={2}>
+                    Gastos
+                  </td>
+                </tr>
+              )}
+              {currentRecord.gastos.map((gasto, index) => {
+                if (gasto.descripcion !== "" || gasto.cantidad !== "") {
+                  return (
+                    <tr key={index}>
+                      <td className="gasto-descripcion">{gasto.descripcion}</td>
+                      <td className="gasto-cantidad">$ {gasto.cantidad}.00</td>
+                    </tr>
+                  );
+                }
+                return null;
+              })}
+              {currentRecord &&
+                currentRecord.gastos.some(
+                  (gasto) => gasto.cantidad.trim() !== ""
+                ) && (
+                  <>
+                    <tr>
+                      <td className="total-gastos">Total Gastos</td>
+                      <td className="total-gastos-cantidad">
+                        $ {calcularTotalGastos()}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="mas-efectivo">+ Efectivo</td>
+                      <td className="mas-efectivo-cantidad">
+                        $ {registros[currentRecordIndex].cuenta}.00
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="titulo">Cuenta total</td>
+                      <td className="cuenta">$ {calcularCuentaTotal()}</td>
+                    </tr>
+                  </>
+                )}
             </>
           )}
         </tbody>

@@ -136,11 +136,58 @@
     border: 1px solid #000;
   }
 
+  .gasto-descripcion {
+    padding: 2px;
+    background-color: #ff9100;
+    font-size: 20px;
+    border: 1px solid #000;
+  }
+
+  .gasto-cantidad {
+    padding: 2px;
+    background-color: #a954e2;
+    font-size: 20px;
+    border: 1px solid #000;
+  }
+
   .encabezado {
     padding: 2px;
     background-color: #4b4b4b;
     color: #ffffff;
+    text-align: center;
     font-size: 20px;
+    border: 1px solid #000;
+  }
+
+  .total-gastos {
+    padding: 2px;
+    font-weight: bold;
+    background-color: #ff9100;
+    font-size: 20px;
+    border: 1px solid #000;
+  }
+
+  .total-gastos-cantidad {
+    padding: 2px;
+    font-weight: bold;
+    background-color: #a954e2;
+    font-size: 22px;
+    border: 1px solid #000;
+  }
+
+  .mas-efectivo {
+    padding: 2px;
+    font-weight: bold;
+    background-color: #00d9ff;
+    font-size: 20px;
+    border: 1px solid #000;
+  }
+
+  .mas-efectivo-cantidad {
+    padding: 2px;
+    font-weight: bold;
+    background-color: #00ffc8;
+    font-size: 22px;
     border: 1px solid #000;
   }
 }
