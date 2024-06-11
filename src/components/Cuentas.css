@@ -27,8 +27,10 @@
 
   form {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     margin-bottom: 20px;
+    align-items: center;
   }
 
   label {
@@ -45,15 +47,16 @@
   }
 
   input {
-    width: 90%;
-    margin-bottom: 10px;
+    width: 150px;
+    margin-bottom: 5px;
+    margin-right: 10px;
     padding: 8px;
     font-size: 16px;
   }
 
   textarea {
-    width: 90%;
-    margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 5px;
     padding: 8px;
     font-size: 16px;
   }
@@ -114,6 +117,22 @@
     font-size: 20px;
   }
 
+  .boton-add {
+    background-color: rgb(94, 255, 0); /* Cambia el color de fondo */
+    color: white; /* Cambia el color del texto */
+    width: 40px; /* Ancho del botón */
+    height: 40px; /* Alto del botón */
+    border: 1px solid black ; /* Elimina el borde */
+    border-radius: 50%; /* Hace que el botón tenga forma de círculo */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    transition: background-color 0.3s ease; /* Agrega una transición */
+    font-size: 30px; /* Tamaño del texto */
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+  }
+
   .titulo {
     padding: 2px;
     background-color: #c8ff00;
@@ -125,6 +144,14 @@
     padding: 2px;
     background-color: #00d9ff;
     font-size: 24px;
+    border: 1px solid #000;
+  }
+
+  .notas {
+    padding: 2px;
+    background-color: #5a5a5a;
+    font-size: 12px;
+    color: #fff;
     border: 1px solid #000;
   }
 

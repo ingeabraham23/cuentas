@@ -18,6 +18,8 @@ const opcionesRuta = [
 ];
 
 const RegistroForm = () => {
+  const [isFormVisible, setFormVisible] = useState(false);
+
   const [registro, setRegistro] = useState({
     fecha: new Date().toISOString().slice(0, 10),
     nombre: "",
@@ -25,9 +27,10 @@ const RegistroForm = () => {
     cuenta: "",
     odo: "",
     kmRecorridos: "",
-    numeroUnidad: "",
     gasolina: "",
     precioGasolina: "",
+    numeroUnidad: "36",
+    notas: "",
     gastos: [
       { descripcion: "", cantidad: "" },
       { descripcion: "", cantidad: "" },
@@ -71,13 +74,6 @@ const RegistroForm = () => {
     }));
   };
 
-  const handleNumeroUnidadChange = (e) => {
-    setRegistro((prevState) => ({
-      ...prevState,
-      numeroUnidad: e.target.value,
-    }));
-  };
-
   const handleGasolinaChange = (e) => {
     setRegistro((prevState) => ({
       ...prevState,
@@ -89,6 +85,20 @@ const RegistroForm = () => {
     setRegistro((prevState) => ({
       ...prevState,
       precioGasolina: e.target.value,
+    }));
+  };
+
+  const handleNumeroUnidadChange = (e) => {
+    setRegistro((prevState) => ({
+      ...prevState,
+      numeroUnidad: e.target.value,
+    }));
+  };
+
+  const handleNotasChange = (e) => {
+    setRegistro((prevState) => ({
+      ...prevState,
+      notas: e.target.value,
     }));
   };
 
@@ -123,112 +133,142 @@ const RegistroForm = () => {
       .catch((error) => {
         console.error("Error al agregar el registro: ", error);
       });
+    setFormVisible(false);
+    // Recarga la página después de enviar el formulario
+    window.location.reload();
+  };
+
+  const llamarFormulario = () => {
+    setFormVisible(true);
+  };
+
+  const handleButtonClick = () => {
+    setFormVisible(false);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        <br></br>
-        <input
-          type="date"
-          name="fecha"
-          value={registro.fecha}
-          onChange={handleFechaChange}
-        />
-      </label>
-      <label>
-        Ruta:
-        <select name="ruta" value={registro.ruta} onChange={handleRutaChange}>
-          {opcionesRuta.map((opcion, index) => (
-            <option key={index} value={opcion}>
-              {opcion}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        <input
-          type="number"
-          name="cuenta"
-          placeholder="CUENTA"
-          value={registro.cuenta}
-          onChange={handleCuentaChange}
-          step="0.01"
-        />
-      </label>
-      <label>
-        <input
-          type="number"
-          name="odo"
-          placeholder="ODOMETRO"
-          value={registro.odo}
-          onChange={handleOdoChange}
-        />
-      </label>
-      <label>
-        <input
-          type="number"
-          name="kmRecorridos"
-          placeholder="KM. RECORRIDOS"
-          value={registro.kmRecorridos}
-          onChange={handleKmRecorridosChange}
-        />
-      </label>
-      <label>
-        <input
-          type="number"
-          name="numeroUnidad"
-          placeholder="NUMERO DE UNIDAD"
-          value={registro.numeroUnidad}
-          onChange={handleNumeroUnidadChange}
-        />
-      </label>
-      <label>
-        <input
-          type="number"
-          name="gasolina"
-          placeholder="$ GASOLINA"
-          value={registro.gasolina}
-          onChange={handleGasolinaChange}
-          step="0.01"
-        />
-      </label>
-      <label>
-        <input
-          type="number"
-          name="precioGasolina"
-          placeholder="PRECIO LITRO GASOLINA"
-          value={registro.precioGasolina}
-          onChange={handlePrecioGasolinaChange}
-          step="0.01"
-        />
-      </label>
-      <label>Gastos:</label>
-      {registro.gastos.map((gasto, index) => (
-        <div key={index}>
+    <>
+      <button className="boton-add" onClick={llamarFormulario}>+</button>
+      {isFormVisible && (
+        <form onSubmit={handleSubmit}>
           <label>
+            <br></br>
             <input
-              placeholder={`Descripción ${index + 1}`}
-              type="text"
-              value={gasto.descripcion}
-              onChange={handleDescripcionChange(index)}
+              type="date"
+              name="fecha"
+              value={registro.fecha}
+              onChange={handleFechaChange}
             />
           </label>
           <label>
+            Ruta:
+            <select
+              name="ruta"
+              value={registro.ruta}
+              onChange={handleRutaChange}
+            >
+              {opcionesRuta.map((opcion, index) => (
+                <option key={index} value={opcion}>
+                  {opcion}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
             <input
-            placeholder={`Cantidad ${index + 1}`}
               type="number"
-              value={gasto.cantidad}
-              onChange={handleCantidadChange(index)}
+              name="cuenta"
+              placeholder="Cuenta"
+              value={registro.cuenta}
+              onChange={handleCuentaChange}
               step="0.01"
             />
           </label>
-        </div>
-      ))}
-      <button className="boton-guardar" type="submit">
-        Agregar Registro
-      </button>
-    </form>
+          <label>
+            <input
+              type="number"
+              name="odo"
+              placeholder="Odometro"
+              value={registro.odo}
+              onChange={handleOdoChange}
+            />
+          </label>
+          <label>
+            <input
+              type="number"
+              name="kmRecorridos"
+              placeholder="Km. Recorridos"
+              value={registro.kmRecorridos}
+              onChange={handleKmRecorridosChange}
+            />
+          </label>
+          <label>
+            <input
+              type="number"
+              name="gasolina"
+              placeholder="$ Gasolina"
+              value={registro.gasolina}
+              onChange={handleGasolinaChange}
+              step="0.01"
+            />
+          </label>
+          <label>
+            <input
+              type="number"
+              name="precioGasolina"
+              placeholder="Precio litro de gasolina"
+              value={registro.precioGasolina}
+              onChange={handlePrecioGasolinaChange}
+              step="0.01"
+            />
+          </label>
+          <label>
+            <input
+              type="number"
+              name="numeroUnidad"
+              placeholder="Numero de unidad"
+              value={registro.numeroUnidad}
+              onChange={handleNumeroUnidadChange}
+            />
+          </label>
+          <label>
+            <textarea
+              rows={4}
+              placeholder="Notas"
+              value={registro.notas}
+              onChange={handleNotasChange}
+            />
+          </label>
+          {registro.gastos.map((gasto, index) => (
+            <div key={index}>
+              <label>
+                <input
+                  placeholder={`Descripción ${index + 1}`}
+                  type="text"
+                  value={gasto.descripcion}
+                  onChange={handleDescripcionChange(index)}
+                />
+              </label>
+              <label>
+                <input
+                  placeholder={`Cantidad ${index + 1}`}
+                  type="number"
+                  value={gasto.cantidad}
+                  onChange={handleCantidadChange(index)}
+                  step="0.01"
+                />
+              </label>
+            </div>
+          ))}
+          <button className="boton-guardar" type="submit">
+            Agregar Registro
+          </button>
+          <button className="boton-eliminar" onClick={handleButtonClick}>
+            Cancelar
+          </button>
+        </form>
+      )}
+    </>
   );
 };
 
@@ -386,17 +426,12 @@ const RegistroTable = () => {
                 <td className="valor">{registros[currentRecordIndex].odo}</td>
               </tr>
               <tr>
-                <td className="titulo">KM. Recorridos</td>
+                <td className="titulo">Recorrido</td>
                 <td className="valor">
                   {registros[currentRecordIndex].kmRecorridos}
                 </td>
               </tr>
-              <tr>
-                <td className="titulo">Numero de Unidad</td>
-                <td className="valor">
-                  {registros[currentRecordIndex].numeroUnidad}
-                </td>
-              </tr>
+
               <tr>
                 <td className="titulo">Gasolina $</td>
                 <td className="valor">
@@ -428,6 +463,30 @@ const RegistroTable = () => {
                   ).toFixed(2)}
                 </td>
               </tr>
+              <tr>
+                <td className="titulo">km. x litro</td>
+                <td className="valor">
+                  {(
+                    registros[currentRecordIndex].kmRecorridos /
+                    (registros[currentRecordIndex].gasolina /
+                      registros[currentRecordIndex].precioGasolina)
+                  ).toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <td className="titulo">Unidad</td>
+                <td className="valor">
+                  {registros[currentRecordIndex].numeroUnidad}
+                </td>
+              </tr>
+              {registros[currentRecordIndex].notas && (
+                <tr>
+                  <td className="titulo">Notas</td>
+                  <td className="notas">
+                    {registros[currentRecordIndex].notas}
+                  </td>
+                </tr>
+              )}
               {hayGastos && (
                 <tr>
                   <td className="encabezado" colSpan={2}>
@@ -517,9 +576,9 @@ const RegistroTable = () => {
             <tr key={registro.id}>
               <td>{formatDate(registro.fecha)}</td>
               <td>{registro.ruta}</td>
-              <td>{registro.cuenta}.00</td>
+              <td>{registro.cuenta}</td>
               <td>{registro.kmRecorridos}</td>
-              <td>{registro.gasolina}.00</td>
+              <td>{registro.gasolina}</td>
             </tr>
           ))}
         </tbody>
