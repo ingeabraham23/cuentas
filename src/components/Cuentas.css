@@ -89,19 +89,31 @@
     font-size: 20px;
   }
 
-  .boton-navegar {
-    background-color: rgb(0, 102, 255); /* Cambia el color de fondo */
-    color: white; /* Cambia el color del texto */
-    padding: 10px; /* Aumenta el espacio alrededor del texto */
-    border: 1px solid #000; /* Elimina el borde */
-    border-radius: 5px; /* Agrega bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar por encima */
-    transition: background-color 0.3s ease; /* Agrega una transición */
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-right: 5px;
-    font-size: 20px;
+  .boton-flotante {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
   }
+  
+  .boton-flotante .boton-navegar {
+    width: 170px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #000; /* Elimina el borde */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 25px;
+  }
+  
+  .boton-flotante .boton-navegar:disabled,
+  .boton-flotante .boton-eliminar:disabled {
+    background-color: #d3d3d3;
+    cursor: not-allowed;
+  }
+  
 
   .boton-capturar {
     background-color: rgb(204, 0, 255); /* Cambia el color de fondo */

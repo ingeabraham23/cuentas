@@ -532,7 +532,7 @@ const RegistroTable = () => {
           )}
         </tbody>
       </table>
-      <div>
+      <div className="boton-flotante">
         <button
           className="boton-navegar"
           onClick={handlePrevious}
@@ -547,17 +547,18 @@ const RegistroTable = () => {
         >
           Siguiente
         </button>
+        
+      </div>
+      <div>
+        <button className="boton-capturar" onClick={capturarTabla}>
+          Capturar
+        </button>
         <button
           className="boton-eliminar"
           onClick={handleDelete}
           disabled={registros.length === 0}
         >
           Eliminar
-        </button>
-      </div>
-      <div>
-        <button className="boton-capturar" onClick={capturarTabla}>
-          Capturar
         </button>
       </div>
       <hr></hr>
@@ -598,6 +599,8 @@ const Cuentas = () => {
       <RegistroForm />
       <hr></hr>
       <RegistroTable />
+      <hr></hr>
+      <hr></hr>
       <hr></hr>
     </div>
   );
